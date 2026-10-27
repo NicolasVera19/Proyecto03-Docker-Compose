@@ -1,0 +1,79 @@
+services:
+  web:
+    build:
+      context: ./web
+    image: ${DOCKERHUB_USER:-usuario}/proyecto03-web:1.0
+    container_name: proyecto03-web
+    ports:
+      - "5000:5000"
+    environment:
+      PROCESAMIENTO_URL: http://procesamiento:5001
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      - procesamiento
+      - redis
+    volumes:
+      - web_logs:/app/logs
+    networks:
+      - red-proyecto
+    restart: unless-stopped
+
+  visualizacion:
+    build:
+      context: ./visualizacion
+    image: ${DOCKERHUB_USER:-usuario}/proyecto03-visualizacion:1.0
+    container_name: proyecto03-visualizacion
+    ports:
+      - "3000:3000"
+    environment:
+      WEB_URL: http://web:5000
+      PROCESAMIENTO_URL: http://procesamiento:5001
+    depends_on:
+      - web
+      - procesamiento
+    volumes:
+      - visualizacion_data:/app/data
+    networks:
+      - red-proyecto
+    restart: unless-stopped
+
+  procesamiento:
+    build:
+      context: ./procesamiento
+    image: ${DOCKERHUB_USER:-usuario}/proyecto03-procesamiento:1.0
+    container_name: proyecto03-procesamiento
+    expose:
+      - "5001"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      - redis
+    volumes:
+      - procesamiento_data:/app/data
+    networks:
+      - red-proyecto
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: proyecto03-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - red-proyecto
+    restart: unless-stopped
+
+networks:
+  red-proyecto:
+    driver: bridge
+
+volumes:
+  web_logs:
+  visualizacion_data:
+  procesamiento_data:
+  redis_data:

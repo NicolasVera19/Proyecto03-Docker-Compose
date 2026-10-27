@@ -1,0 +1,12 @@
+{
+  "name": "proyecto03-visualizacion",
+  "version": "1.0.0",
+  "description": "Interfaz de visualizacion para Proyecto 03",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
