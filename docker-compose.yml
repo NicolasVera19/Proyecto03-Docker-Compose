@@ -2,7 +2,7 @@ services:
   web:
     build:
       context: ./web
-    image: ${DOCKERHUB_USER:-usuario}/proyecto03-web:1.0
+    image: nicolasv1901/proyecto03-web:1.0
     container_name: proyecto03-web
     ports:
       - "5000:5000"
@@ -22,7 +22,7 @@ services:
   visualizacion:
     build:
       context: ./visualizacion
-    image: ${DOCKERHUB_USER:-usuario}/proyecto03-visualizacion:1.0
+    image: nicolasv1901/proyecto03-visualizacion:1.0
     container_name: proyecto03-visualizacion
     ports:
       - "3000:3000"
@@ -41,7 +41,7 @@ services:
   procesamiento:
     build:
       context: ./procesamiento
-    image: ${DOCKERHUB_USER:-usuario}/proyecto03-procesamiento:1.0
+    image: nicolasv1901/proyecto03-procesamiento:1.0
     container_name: proyecto03-procesamiento
     expose:
       - "5001"
